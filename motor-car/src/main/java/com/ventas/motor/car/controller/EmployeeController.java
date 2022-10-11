@@ -18,10 +18,9 @@ public class EmployeeController {
 
     @GetMapping("/")
     public String viewHomePage(Model model){
-        model.addAttribute("listEmployees", employeeService.getAllEmployees());
         return "index";
     }
-
+    
     @GetMapping("/showNewEmployeeForm")
     public String showNewEmployeeForm(Model model){
         // create model attribute to bind form data
@@ -29,12 +28,18 @@ public class EmployeeController {
         model.addAttribute("employee", employee);
         return "new_employee";
     }
+    
+    @GetMapping("/EmployeeForm")
+    public String EmployeeForm(Model model){
+    	model.addAttribute("listEmployees", employeeService.getAllEmployees());
+        return "employee";
+    }
 
     @PostMapping("/saveEmployee")
     public String saveEmployee(@ModelAttribute("employee") Employee employee){
         // Save employee to database
         employeeService.saveEmployee(employee);
-        return "redirect:/";
+        return "redirect:/EmployeeForm";
     }
 
     @GetMapping("/showFormForUpdate/{id}")
@@ -50,9 +55,10 @@ public class EmployeeController {
 
     @GetMapping("/deleteEmployee/{id}")
     public String deleteEmployee(@PathVariable(value = "id") long id) {
-
         // call delete employee method
         this.employeeService.deleteEmployeeById(id);
-        return "redirect:/";
+        return "redirect:/EmployeeForm";
     }
+    
+    
 }
